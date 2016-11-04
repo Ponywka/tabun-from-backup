@@ -86,7 +86,7 @@ class ActionAjax extends Action
         $this->AddEventPreg('/^geo/i', '/^get/', '/^cities/', 'EventGeoGetCities');
 
         $this->AddEventPreg('/^infobox/i', '/^info/', '/^blog/', 'EventInfoboxInfoBlog');
-        
+
         $this->AddEvent('get-object-votes', 'EventGetObjectVotes');
     }
 
@@ -1266,19 +1266,19 @@ class ActionAjax extends Action
     protected function EventCommentDelete()
     {
         /**
-         * Есть права на удаление комментария?
-         */
-        if (!$this->ACL_CanDeleteComment($this->oUserCurrent)) {
-            $this->Message_AddErrorSingle($this->Lang_Get('not_access'), $this->Lang_Get('error'));
-            return;
-        }
-        /**
          * Комментарий существует?
          */
         $idComment=getRequestStr('idComment', null, 'post');
         if (!($oComment=$this->Comment_GetCommentById($idComment))) {
             $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
             return;
+		}
+		/**
+		 * Есть права на удаление комментария?
+		 */
+		if (!$this->ACL_IsAllowDeleteComment($this->oUserCurrent,$oComment)) {
+			$this->Message_AddErrorSingle($this->Lang_Get('not_access'),$this->Lang_Get('error'));
+			return;
         }
         /**
          * Устанавливаем пометку о том, что комментарий удален
@@ -1408,7 +1408,7 @@ class ActionAjax extends Action
         $this->Viewer_Assign('oComment', $oComment);
         $this->Viewer_AssignAjax('notice', $this->Viewer_Fetch('comment_modify_notice.tpl'));
     }
-    
+
     protected function EventGetObjectVotes()
     {
         $targetType = getRequestStr('targetType', null, 'post');
@@ -1453,7 +1453,7 @@ class ActionAjax extends Action
             $this->Message_AddErrorSingle($this->Lang_Get('need_authorization'), $this->Lang_Get('error'));
             return;
         }
-        
+
         /**
          * Объект существует?
          */
@@ -1461,12 +1461,12 @@ class ActionAjax extends Action
             $this->Message_AddErrorSingle($this->Lang_Get('system_error'), $this->Lang_Get('error'));
             return;
         }
-        
+
         if (!$this->ACL_CheckSimpleAccessLevel($newAgeEnableLevel, $this->oUserCurrent, $oTarget, $targetType)) {
             $this->Message_AddErrorSingle($this->Lang_Get('not_access'), $this->Lang_Get('error'));
             return;
         }
-        
+
         $aVotes = $this->Vote_SimpleGetVoteByOneTarget($targetId, $targetType);
         $aResult = array();
         foreach ($aVotes as $oVote) {

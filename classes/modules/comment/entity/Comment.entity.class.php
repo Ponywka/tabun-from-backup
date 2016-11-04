@@ -400,7 +400,7 @@ class ModuleComment_EntityComment extends Entity
     {
         $this->_aData['comment_count_favourite']=$data;
     }
-    
+
     /**
      * Возвращает состояние всех флагов
      *
@@ -410,7 +410,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return $this->_getDataOne('flags');
     }
-    
+
     /**
      * Устаналивает состояние всех флагов
      *
@@ -420,7 +420,7 @@ class ModuleComment_EntityComment extends Entity
     {
         $this->_aData['flags']=$data;
     }
-    
+
     /**
      * Проверяет, установлены ли все переданные флаги
      *
@@ -431,7 +431,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return ($this->_getDataOne('flags') & $mask) === $mask;
     }
-    
+
     /**
      * Проверяет, установлен ли хотя бы один из переданных флагов
      *
@@ -442,7 +442,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return ($this->_getDataOne('flags') & $mask) !== 0;
     }
-    
+
     /**
      * Устаналивает флаг или набор флагов
      *
@@ -452,7 +452,7 @@ class ModuleComment_EntityComment extends Entity
     {
         $this->_aData['flags'] = $this->_getDataOne('flags') | $mask;
     }
-    
+
     /**
      * Сбрасывает флаг или набор флагов
      *
@@ -462,7 +462,7 @@ class ModuleComment_EntityComment extends Entity
     {
         $this->_aData['flags'] = $this->_getDataOne('flags') & ~$mask;
     }
-    
+
     // флаги
     const FLAG_HAS_ANSWER      = 4;     // на комментарий есть ответ
     const FLAG_MODIFIED        = 8;     // комментарий изменён
@@ -478,7 +478,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return $this->_getDataOne('comment_last_modify_id');
     }
-    
+
     /**
      * Возвращает ID автора последнего изменения
      *
@@ -488,7 +488,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return $this->_getDataOne('comment_last_modify_user');
     }
-    
+
     /**
      * Возвращает время последнего изменения
      *
@@ -498,7 +498,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return $this->_getDataOne('comment_last_modify_date');
     }
-    
+
     /**
      * Возвращает время блокировки изменения
      *
@@ -508,7 +508,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return $this->_getDataOne('comment_lock_modify_date');
     }
-    
+
     /**
      * Возвращает ID пользователя, заблокировавшего изменение
      *
@@ -518,7 +518,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return $this->_getDataOne('comment_lock_modify_user');
     }
-    
+
     /**
      * Устанавливает ID последнего изменения
      *
@@ -528,7 +528,7 @@ class ModuleComment_EntityComment extends Entity
     {
         $this->_aData['comment_last_modify_id'] = $id;
     }
-    
+
     /**
      * Устанавливает ID автора последнего изменения, устанавливает его время в текущее и возвращает его
      *
@@ -542,7 +542,7 @@ class ModuleComment_EntityComment extends Entity
         $this->_aData['comment_last_modify_date'] = &$date;
         return $date;
     }
-    
+
     /**
      * Устанавливает ID пользователя, заблокировавшего изменение, и время блокировки
      *
@@ -553,7 +553,7 @@ class ModuleComment_EntityComment extends Entity
         $this->_aData['comment_lock_modify_user'] = $userId;
         $this->_aData['comment_lock_modify_date'] = date('Y-m-d H:i:s');
     }
-    
+
     /**
      * Проверяет права на изменение комментария. Обёртка для comment.tpl
      *
@@ -564,7 +564,7 @@ class ModuleComment_EntityComment extends Entity
     {
         return ($accessMask & ModuleACL::EDIT_ALLOW_FIX) !== 0;
     }
-    
+
     /**
      * Проверяет права на блокировку изменения комментария. Обёртка для comment.tpl
      *
@@ -575,7 +575,17 @@ class ModuleComment_EntityComment extends Entity
     {
         return ($accessMask & ModuleACL::EDIT_ALLOW_LOCK) !== 0;
     }
-    
+
+	/**
+	 * Проверяет права на удаление комментария.
+	 *
+	 * @param ModuleUser_EntityUser $oUser
+	 * @return bool
+	 */
+	public function testAllowDelete($oUser) {
+		return $this->ACL_IsAllowDeleteComment($oUser,$this);
+	}
+
     /**
      * Проверяет, был ли комментарий изменён или заблокирован для изменения. Обёртка для comment.tpl
      *

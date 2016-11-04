@@ -17,7 +17,7 @@
 {/if}
 
 {if $oCommentRating <= $oConfig->GetValue('module.user.bad_rating')}
-    {if $oUserCurrent and $oUserCurrent->isAdministrator()}
+    {if $oUserCurrent and $oComment->testAllowDelete($oUserCurrent)}
         <section data-id="{$oCommentId}" id="comment_id_{$oCommentId}" class="comment comment-deleted comment-bad">
             <a id="comment{$oCommentId}"></a>
             <div class="text current">{$oComment->getText()}</div>
