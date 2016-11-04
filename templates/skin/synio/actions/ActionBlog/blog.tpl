@@ -34,7 +34,7 @@
 <div class="blog-top">
 	<h2 class="page-header">{$oBlog->getTitle()|escape:'html'} {if $oBlog->getType()=='close'} <i title="{$aLang.blog_closed}" class="icon-synio-topic-private"></i>{/if}</h2>
 
-	<div id="vote_area_blog_{$oBlogId}" class="vote-topic 
+	<div id="vote_area_blog_{$oBlogId}" class="vote-topic
 															{if $oBlogRating > 0}
 																vote-count-positive
 															{elseif $oBlogRating < 0}
@@ -43,7 +43,7 @@
 																vote-count-zero
 															{/if}
 															{if $oVote} 
-																voted 
+																voted
 																{if $oVote->getDirection() > 0}
 																	voted-up
 																{elseif $oVote->getDirection() < 0}
@@ -109,7 +109,7 @@
 
 		<div class="blog-content text">
 			<div class="blog-description">{$oBlog->getDescription()}</div>
-		
+
 			<ul class="blog-info">
 				<li><span>{$aLang.infobox_blog_create}</span> <strong>{date_format date=$oBlog->getDateAdd() format="j F Y"}</strong></li>
 				<li><span>{$aLang.infobox_blog_topics}</span> <strong>{$oBlog->getCountTopic()}</strong></li>
@@ -199,7 +199,7 @@
 </div>
 
 {if $bCloseBlog}
-	{$aLang.blog_close_show}
+	{$aLang.topic_no_permission_read}
 {else}
 	{include file='topic_list.tpl'}
 {/if}
