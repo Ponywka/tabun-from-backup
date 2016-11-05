@@ -135,11 +135,12 @@ class ModuleBlog_MapperBlog extends Mapper
         $sql = "INSERT INTO ".Config::Get('db.table.blog_user')." 
 			(blog_id,
 			user_id,
-			user_role
+			user_role,
+			deleted
 			)
-			VALUES(?d,  ?d, ?d)
+			VALUES(?d, ?d, ?d, ?d)
 		";
-        if ($this->oDb->query($sql, $oBlogUser->getBlogId(), $oBlogUser->getUserId(), $oBlogUser->getUserRole())===0) {
+		if ($this->oDb->query($sql,$oBlogUser->getBlogId(),$oBlogUser->getUserId(),$oBlogUser->getUserRole(),$oBlogUser->getDeleted())===0) {
             return true;
         }
         return false;
@@ -150,8 +151,8 @@ class ModuleBlog_MapperBlog extends Mapper
      * @param ModuleBlog_EntityBlogUser $oBlogUser	Объект отношения пользователя с блогом
      * @return bool
      */
-    public function DeleteRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser)
-    {
+	public function DeleteRelationBlogUser(ModuleBlog_EntityBlogUser $oBlogUser) {
+		if ($oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE) {
         $sql = "DELETE FROM ".Config::Get('db.table.blog_user')." 
 			WHERE
 				blog_id = ?d
@@ -163,6 +164,10 @@ class ModuleBlog_MapperBlog extends Mapper
         }
         return false;
     }
+
+		$oBlogUser->setDeleted(true);
+		return Engine::getInstance()->Blog_UpdateRelationBlogUser($oBlogUser);
+	}
     /**
      * Обновляет отношение пользователя с блогом
      *
@@ -177,7 +182,8 @@ class ModuleBlog_MapperBlog extends Mapper
 				user_blog_permissions = ?d,
 				user_topic_permissions = ?d,
 				user_comment_permissions = ?d,
-				user_vote_permissions = ?d
+				user_vote_permissions = ?d,
+				deleted = ?d
 			WHERE
 				blog_id = ?d 
 				AND
@@ -190,6 +196,7 @@ class ModuleBlog_MapperBlog extends Mapper
 			$oBlogUser->getTopicPermissions()->get(),
 			$oBlogUser->getCommentPermissions()->get(),
 			$oBlogUser->getVotePermissions()->get(),
+			$oBlogUser->getDeleted(),
 			$oBlogUser->getBlogId(),
 			$oBlogUser->getUserId()
 		)) {
@@ -215,6 +222,16 @@ class ModuleBlog_MapperBlog extends Mapper
         if (isset($aFilter['user_id'])) {
             $sWhere.=" AND bu.user_id =  ".(int)$aFilter['user_id'];
         }
+		if (isset($aFilter['not_deleted'])) {
+			$sWhere.=" AND bu.deleted = 0";
+		}
+		if (isset($aFilter['not_banned'])) {
+			$sWhere.=" AND ((bu.user_topic_permissions IS NULL AND bu.user_role>".ModuleBlog::BLOG_USER_ROLE_GUEST.") OR bu.user_topic_permissions IN (2, 3, 6, 7, 10, 11, 14, 15))"; // Магия
+		} else if (isset($aFilter['admin'])) {
+			$sWhere.=" AND ((bu.user_blog_permissions IS NULL AND bu.user_role=".ModuleBlog::BLOG_USER_ROLE_ADMINISTRATOR.") OR bu.user_blog_permissions IN (4, 5, 6, 7, 12, 13, 14, 15))"; // Магия
+		} else if (isset($aFilter['moder'])) {
+			$sWhere.=" AND (((bu.user_topic_permissions IS NULL OR bu.user_comment_permissions IS NULL) AND bu.user_role=".ModuleBlog::BLOG_USER_ROLE_MODERATOR.") OR (bu.user_topic_permissions > 3) OR (bu.user_comment_permissions > 3)) AND bu.user_blog_permissions IN (0, 1, 2, 3, 8, 9, 10, 11)"; // Магия
+		} else {
         if (isset($aFilter['user_role'])) {
             if (!is_array($aFilter['user_role'])) {
                 $aFilter['user_role']=array($aFilter['user_role']);
@@ -223,6 +240,7 @@ class ModuleBlog_MapperBlog extends Mapper
         } else {
             $sWhere.=" AND bu.user_role>".ModuleBlog::BLOG_USER_ROLE_GUEST;
         }
+		}
 
         $sql = "SELECT
 					bu.*				

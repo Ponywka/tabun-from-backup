@@ -116,7 +116,7 @@ class ModuleBlog extends Module
             } else {
                 $oBlog->setOwner(null); // или $oBlog->setOwner(new ModuleUser_EntityUser());
             }
-            if (isset($aBlogUsers[$oBlog->getId()])) {
+			if (isset($aBlogUsers[$oBlog->getId()]) && !$aBlogUsers[$oBlog->getId()]->getDeleted()) {
                 $oBlog->setUserIsJoin(true);
                 $oBlog->setUserIsAdministrator($aBlogUsers[$oBlog->getId()]->getIsAdministrator());
                 $oBlog->setUserIsModerator($aBlogUsers[$oBlog->getId()]->getIsModerator());
@@ -450,11 +450,8 @@ class ModuleBlog extends Module
      * @param int $iPerPage	Количество элементов на одну страницу
      * @return array
      */
-    public function GetBlogUsersByBlogId($sBlogId, $iRole=null, $iPage=1, $iPerPage=100)
-    {
-        $aFilter=array(
-            'blog_id'=> $sBlogId,
-        );
+	public function GetBlogUsersByBlogId($sBlogId,$iRole=null,$iPage=1,$iPerPage=100,$aFilter=array()) {
+		$aFilter['blog_id'] = $sBlogId;
         if ($iRole!==null) {
             $aFilter['user_role']=$iRole;
         }
@@ -955,10 +952,10 @@ class ModuleBlog extends Module
         $aSize=Config::Get('module.blog.avatar_size');
         rsort($aSize, SORT_NUMERIC);
         $sSizeBig=array_shift($aSize);
-        
+
         $img_max_width = Config::Get('view.processing.img_max_width');
         $img_max_height = Config::Get('view.processing.img_max_height');
-        
+
         if ($oImage && $sFileAvatar=$this->Image_Resize($sFileTmp, $sPath, "avatar_blog_{$oBlog->getUrl()}_{$sSizeBig}x{$sSizeBig}", $img_max_width, $img_max_height, $sSizeBig, $sSizeBig, false, $oImage)) {
             foreach ($aSize as $iSize) {
                 if ($iSize==0) {

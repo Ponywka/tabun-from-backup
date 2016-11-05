@@ -153,8 +153,6 @@
 					<li>
 						<a href="{router page='blog'}edit/{$oBlogId}/" title="{$aLang.blog_edit}" class="edit">{$aLang.blog_edit}</a></li>
 						{if $oUserCurrent->isAdministrator()}
-							<li><a href="#" title="{$aLang.blog_delete}" id="blog_delete_show" class="delete">{$aLang.blog_delete}</a>
-						{else}
 							<a href="{router page='blog'}delete/{$oBlogId}/?security_ls_key={$LIVESTREET_SECURITY_KEY}" title="{$aLang.blog_delete}" onclick="return confirm('{$aLang.blog_admin_delete_confirm}');" >{$aLang.blog_delete}</a>
 						{/if}
 					</li>

@@ -782,7 +782,7 @@ class ActionBlog extends Action
          * Текущая страница
          */
         $iPage= $this->GetParamEventMatch(1, 2) ? $this->GetParamEventMatch(1, 2) : 1;
-        $aBlogUsersResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(), ModuleBlog::BLOG_USER_ROLE_USER, $iPage, Config::Get('module.blog.users_per_page'));
+		$aBlogUsersResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(),null,$iPage,Config::Get('module.blog.users_per_page'),array('not_banned'=>1,'not_deleted'=>1));
         $aBlogUsers=$aBlogUsersResult['collection'];
         /**
          * Формируем постраничность
@@ -889,11 +889,11 @@ class ActionBlog extends Action
         /**
          * Получаем список юзеров блога
          */
-        $aBlogUsersResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(), ModuleBlog::BLOG_USER_ROLE_USER, 1, Config::Get('module.blog.users_per_page'));
+		$aBlogUsersResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(),null,1,Config::Get('module.blog.users_per_page'),array('not_banned'=>1,'not_deleted'=>1));
         $aBlogUsers=$aBlogUsersResult['collection'];
-        $aBlogModeratorsResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(), ModuleBlog::BLOG_USER_ROLE_MODERATOR);
+		$aBlogModeratorsResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(),null,1,Config::Get('module.blog.users_per_page'),array('moder'=>1,'not_deleted'=>1));
         $aBlogModerators=$aBlogModeratorsResult['collection'];
-        $aBlogAdministratorsResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(), ModuleBlog::BLOG_USER_ROLE_ADMINISTRATOR);
+		$aBlogAdministratorsResult=$this->Blog_GetBlogUsersByBlogId($oBlog->getId(),null,1,Config::Get('module.blog.users_per_page'),array('admin'=>1,'not_deleted'=>1));
         $aBlogAdministrators=$aBlogAdministratorsResult['collection'];
         /**
          * Для админов проекта получаем список блогов и передаем их во вьювер
@@ -1315,6 +1315,7 @@ class ActionBlog extends Action
                 $oBlogUserNew->setBlogId($oBlog->getId());
                 $oBlogUserNew->setUserId($oUser->getId());
                 $oBlogUserNew->setUserRole(ModuleBlog::BLOG_USER_ROLE_INVITE);
+				$oBlogUserNew->setDeleted(false);
 
                 if ($this->Blog_AddRelationBlogUser($oBlogUserNew)) {
                     $aResult[]=array(
@@ -1744,14 +1745,17 @@ class ActionBlog extends Action
          * Получаем текущий статус пользователя в блоге
          */
         $oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(), $this->oUserCurrent->getId());
-        if (!$oBlogUser || ($oBlogUser->getUserRole()<ModuleBlog::BLOG_USER_ROLE_GUEST && $oBlog->getType()=='close')) {
+		if (!$oBlogUser || $oBlogUser->getDeleted()) {
             if ($oBlog->getOwnerId()!=$this->oUserCurrent->getId()) {
                 /**
                  * Присоединяем юзера к блогу
                  */
                 $bResult=false;
                 if ($oBlogUser) {
+					if ($oBlogUser->getUserRole()==ModuleBlog::BLOG_USER_ROLE_INVITE) {
                     $oBlogUser->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
+					}
+					$oBlogUser->setDeleted(false);
                     $bResult = $this->Blog_UpdateRelationBlogUser($oBlogUser);
                 } elseif ($oBlog->getType()=='open' || in_array($oBlog->getId(), Config::Get('module.blog.semi_closed_id'))) {
                     // Orhideous Semi-close blogs
@@ -1759,6 +1763,7 @@ class ActionBlog extends Action
                     $oBlogUserNew->setBlogId($oBlog->getId());
                     $oBlogUserNew->setUserId($this->oUserCurrent->getId());
                     $oBlogUserNew->setUserRole(ModuleBlog::BLOG_USER_ROLE_USER);
+					$oBlogUserNew->setDeleted(false);
                     $bResult = $this->Blog_AddRelationBlogUser($oBlogUserNew);
                 }
                 if ($bResult) {
@@ -1789,8 +1794,7 @@ class ActionBlog extends Action
                 $this->Message_AddErrorSingle($this->Lang_Get('blog_join_error_self'), $this->Lang_Get('attention'));
                 return;
             }
-        }
-        if ($oBlogUser && $oBlogUser->getUserRole()>ModuleBlog::BLOG_USER_ROLE_GUEST) {
+		} else if ($oBlogUser && !$oBlogUser->getDeleted()) {
             /**
              * Покидаем блог
              */
