@@ -57,14 +57,14 @@
 
 	{if $bAllowNewComment}
 		<div class="comments-not-allowed">{$sNoticeNotAllow}</div>
+	{elseif !$oUserCurrent}
+		<div class="comments-not-allowed">{$aLang.comment_unregistered}</div>
 	{elseif !$bAddCommentPermission}
 		<div class="comments-not-allowed">{$sNoticeNoPermission}</div>
 	{else}
-		{if $oUserCurrent}
+		{include file='editor.tpl' sImgToLoad='form_comment_text'}
 
-			{include file='editor.tpl' sImgToLoad='form_comment_text'}
-	
-			<h4 class="reply-header" id="comment_id_0">
+		<h4 class="reply-header" id="comment_id_0">
 			<a class="link-dotted">{$sNoticeCommentAdd}</a>
 			</h4>
 
@@ -82,9 +82,6 @@
 				<input type="hidden" name="cmt_target_id" value="{$iTargetId}" />
 			</form>
 		</div>
-	{else}
-		<div class="comments-not-allowed">{$aLang.comment_unregistered}</div>
-	{/if}
 {/if}
 <div data-parent_id="" data-quote="" id="quote" style="display: none;"><i>&nbsp;</i>цитировать<b>&nbsp;</b></div>
 <div id="hidden-message" class="h-hidden">Скрыто <b></b> <span></span> <a>Показать</a></div>

@@ -493,13 +493,16 @@ class ModuleACL extends Module
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
+
+		$oBlog = $oTopic->getBlog();
+
 		/**
 		 * Если автор(смотритель) блога
 		 */
-		if ($oTopic->getBlog()->getOwnerId()==$oUser->getId()) {
+		if ($oBlog->getOwnerId()==$oUser->getId()) {
 			return true;
 		}
-		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oTopic->getBlogId(),$oUser->getId())) {
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
 			if(($oBlog->getType()=='close') && $oBlogUser->getDeleted()) {
 				return false;
 			}
@@ -626,6 +629,18 @@ class ModuleACL extends Module
 	 * @return bool
 	 */
 	public function IsAllowReadTopicsInBlog($oBlog,$oUser) {
+		/**
+		 * Разрешаем если блог открытый
+		 */
+		if($oBlog->getType()!='close') {
+			return true;
+		}
+		if (!$oUser) {
+			return false;
+		}
+		/**
+		 * Разрешаем если это администратор сайта
+		 */
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
@@ -635,20 +650,17 @@ class ModuleACL extends Module
 		if ($oBlog->getOwnerId() == $oUser->getId()) {
 			return true;
 		}
-		if($oBlog->getType()=='close') {
-			/**
-			 * Разрешаем, если установлено разрешение (кхм...)
-			 */
-			if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-				return (
-					!$oBlogUser->getDeleted()
-					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
-					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
-				);
-			}
-			return false;
+		/**
+		 * Разрешаем, если установлено разрешение (кхм...)
+		 */
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
+			return (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+			);
 		}
-		return true;
+		return false;
 	}
 	/**
 	 * Проверяет можно или нет пользователю читать комментарии в данном блоге
@@ -658,6 +670,18 @@ class ModuleACL extends Module
 	 * @return bool
 	 */
 	public function IsAllowReadCommentsInBlog($oBlog,$oUser) {
+		/**
+		 * Разрешаем если блог открытый
+		 */
+		if($oBlog->getType()!='close') {
+			return true;
+		}
+		if (!$oUser) {
+			return false;
+		}
+		/**
+		 * Разрешаем если это администратор сайта
+		 */
 		if ($oUser->isAdministrator()) {
 			return true;
 		}
@@ -667,23 +691,20 @@ class ModuleACL extends Module
 		if ($oBlog->getOwnerId() == $oUser->getId()) {
 			return true;
 		}
-		if($oBlog->getType()=='close') {
-			/**
-			 * Разрешаем, если установлено разрешение (кхм...)
-			 */
-			if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
-				if (
-					!$oBlogUser->getDeleted()
-					&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
-					&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
-					&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
-				) {
-					return true;
-				}
+		/**
+		 * Разрешаем, если установлено разрешение (кхм...)
+		 */
+		if ($oBlogUser=$this->Blog_GetBlogUserByBlogIdAndUserId($oBlog->getId(),$oUser->getId())) {
+			if (
+				!$oBlogUser->getDeleted()
+				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getTopicPermissions()->check(Permissions::READ)
+				&& $oBlogUser->getCommentPermissions()->check(Permissions::READ)
+			) {
+				return true;
 			}
-			return false;
 		}
-		return true;
+		return false;
 	}
 	/**
      * Проверяет можно или нет пользователю управлять пользователями блога
