@@ -53,7 +53,7 @@ services:
       - '8000:80'
     volumes:
       - .:/app
-      - static:/app/static
+      - static:/static
       - storage:/storage
     depends_on:
       - php-fpm
