@@ -4,6 +4,5 @@ WORKDIR /build
 COPY package.json .
 COPY yarn.lock .
 RUN yarn install
-# Move this to frontend/ directory
 COPY webpack.config.babel.js .
 COPY .babelrc .

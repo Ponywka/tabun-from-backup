@@ -64,7 +64,7 @@ const plugins = isDev ? [
 
 module.exports = {
   mode: ENV,
-  context: path.resolve(__dirname, 'frontend'),
+  context: path.resolve(__dirname, 'src'),
   entry: {
     main: ['./main.coffee', './main.styl'],
     comments: './comments.coffee',
@@ -85,8 +85,8 @@ module.exports = {
     modules: [
       nodePath,
       'node_modules',
-      path.resolve(__dirname, 'frontend'),
-      path.resolve(path.join(__dirname, 'frontend', 'vendor')),
+      path.resolve(__dirname, 'src'),
+      path.resolve(path.join(__dirname, 'src', 'vendor')),
       path.resolve(__dirname, 'locales'),
     ],
   },

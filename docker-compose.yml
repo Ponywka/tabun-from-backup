@@ -37,10 +37,10 @@ services:
 
   frontend:
     build:
-      context: .
+      context: frontend
       dockerfile: docker/frontend/Dockerfile
     volumes:
-      - ./frontend:/build/frontend
+      - ./frontend/src:/build/src
       - compiled_locales:/build/locales
       - static:/build/static
     command: npm run build-dev
