@@ -1,4 +1,4 @@
-run: backend-version composer-install compile-locales
+run: backend-version composer-install
 	docker-compose up
 
 composer-install:
@@ -8,5 +8,4 @@ backend-version:
 	@git describe --always > ./backend.version
 
 compile-locales:
-	docker-compose run --rm frontend sh ./docker/compile_locales.sh
-	docker-compose restart php-fpm || true # ignore error if php-fpm container is not started
+	docker-compose run --rm localization modd -p

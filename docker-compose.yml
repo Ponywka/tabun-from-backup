@@ -5,8 +5,16 @@ volumes:
   elastic:
   storage:
   database:
+  compiled_locales:
 
 services:
+  localization:
+    # TODO: Build and push image
+    build:
+      context: docker/locales/
+    volumes:
+      - ./i18n:/source
+      - compiled_locales:/destination
   php-fpm:
     build:
       context: .
@@ -20,8 +28,10 @@ services:
       - /app/vendor
       - static:/static
       - storage:/storage
+      - compiled_locales:/app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
     depends_on:
       - mariadb
+      - localization
     environment:
       MARIADB_USER: ${MARIADB_USER:-tabun}
       MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
