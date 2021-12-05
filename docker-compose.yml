@@ -9,9 +9,7 @@ volumes:
 
 services:
   localization:
-    # TODO: Build and push image
-    build:
-      context: docker/locales/
+    image: ghcr.io/everypony/locale-builder:latest
     volumes:
       - ./i18n:/source
       - compiled_locales:/destination
