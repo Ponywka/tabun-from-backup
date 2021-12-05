@@ -38,12 +38,11 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: docker/php/Dockerfile
-      target: frontend
+      dockerfile: docker/frontend/Dockerfile
     volumes:
-      - .:/app
-      - /app/node_modules
-      - static:/app/static
+      - ./frontend:/build/frontend
+      - compiled_locales:/build/locales
+      - static:/build/static
     command: npm run build-dev
 
   nginx:

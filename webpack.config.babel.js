@@ -87,7 +87,7 @@ module.exports = {
       'node_modules',
       path.resolve(__dirname, 'frontend'),
       path.resolve(path.join(__dirname, 'frontend', 'vendor')),
-      path.resolve(path.join(__dirname, 'templates', 'skin', 'synio')),
+      path.resolve(__dirname, 'locales'),
     ],
   },
   resolveLoader: {
