@@ -6,3 +6,4 @@ COPY yarn.lock .
 RUN yarn install
 COPY webpack.config.babel.js .
 COPY .babelrc .
+CMD ["npm", "run", "build-dev"]
