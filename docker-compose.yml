@@ -19,7 +19,6 @@ services:
       dockerfile: docker/php/Dockerfile
       target: dev
     ports:
-      - '9000:9000'
       - '39000:39000'
     volumes:
       - .:/app
@@ -45,16 +44,18 @@ services:
     depends_on:
       - localization
 
-  nginx:
-    build:
-      context: .
-      dockerfile: docker/nginx/Dockerfile
+  ingress:
+    image: nginx:alpine
     ports:
-      - '8000:80'
+      - "8080:80"
+    environment:
+      NGINX_PORT: 80
+      APP_PHP_BACKEND: "php-fpm:9000"
     volumes:
       - .:/app
       - static:/static
       - storage:/storage
+      - ./docker/nginx:/etc/nginx/templates
     depends_on:
       - php-fpm
       - frontend
