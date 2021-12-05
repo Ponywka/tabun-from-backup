@@ -221,3 +221,37 @@ msgstr "Масштаб"
 
 msgid "image_uploader_save"
 msgstr "Сохранить"
+
+# Search
+msgid "search_sort_by"
+msgstr "Сортировать по:"
+
+msgid "search_sort_by_date"
+msgstr "дате"
+
+msgid "search_sort_by_score"
+msgstr "релевантности"
+
+msgid "search_sort_by_rating"
+msgstr "рейтингу"
+
+msgid "search_sort_dir"
+msgstr "Упорядочить по:"
+
+msgid "search_sort_dir_asc"
+msgstr "возрастанию"
+
+msgid "search_sort_dir_desc"
+msgstr "убыванию"
+
+msgid "search_query_type"
+msgstr "Искать в"
+
+msgid "search_placeholder"
+msgstr "Что ищем?"
+
+msgid "search_type_topic"
+msgstr "топиках"
+
+msgid "search_type_comment"
+msgstr "комментариях"
