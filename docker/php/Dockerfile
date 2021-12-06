@@ -30,6 +30,8 @@ RUN apt-get update \
     && sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen
 
+# PHP config for development
+RUN mv /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 # Pool configuration
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/
 
@@ -38,6 +40,8 @@ VOLUME /storage
 
 FROM development AS production
 
+# PHP config for production
+RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 # Application
 COPY classes .
 COPY settings .
