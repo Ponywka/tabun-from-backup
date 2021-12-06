@@ -1,11 +1,11 @@
 FROM php:7.4-fpm AS development
 
-ENV COMPOSER_VERSION="1.10.17"
-ENV COMPOSER_PATH="/usr/local/bin/composer"
-ENV COMPOSER_BUILD_DEPS="libzip-dev libonig-dev libcurl4-openssl-dev libmagickwand-6.q16-dev libmagickcore-6.q16-dev"
-ENV COMMON_RUNTIME_DEPS="libzip4 libonig5 libcurl4 imagemagick locales unzip"
-ENV PECL_EXTENSIONS="imagick redis xdebug"
-ENV PHP_CORE_EXTENSIONS="mysqli gettext bcmath zip"
+ARG COMPOSER_VERSION="1.10.17"
+ARG COMPOSER_PATH="/usr/local/bin/composer"
+ARG COMPOSER_BUILD_DEPS="libzip-dev libonig-dev libcurl4-openssl-dev libmagickwand-6.q16-dev libmagickcore-6.q16-dev"
+ARG COMMON_RUNTIME_DEPS="libzip4 libonig5 libcurl4 imagemagick locales unzip"
+ARG PECL_EXTENSIONS="imagick redis xdebug"
+ARG PHP_CORE_EXTENSIONS="mysqli gettext bcmath zip"
 ENV TZ=Europe/Moscow
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
