@@ -26,7 +26,6 @@ services:
       - ./engine:/var/www/html/engine
       - ./templates:/var/www/html/templates
       - ./index.php:/var/www/html/index.php
-      - static:/static
       - storage:/storage
       - compiled_locales:/var/www/html/templates/skin/synio/locale/ru_RU/LC_MESSAGES
     depends_on:
