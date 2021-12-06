@@ -18,7 +18,7 @@
 /**
  * Operations with Config object
  */
-require_once(dirname(dirname(__FILE__)) . "/engine/lib/internal/ConfigSimple/Config.class.php");
+require_once(dirname(__FILE__, 2) . "/engine/lib/internal/ConfigSimple/Config.class.php");
 Config::LoadFromFile(dirname(__FILE__) . '/application.php');
 
 /**
@@ -50,4 +50,4 @@ if (file_exists($local_config)) {
 /**
  * Composer libs
  */
-require_once("/app/vendor/autoload.php");
+require_once(dirname(__FILE__, 2) . "/vendor/autoload.php");
