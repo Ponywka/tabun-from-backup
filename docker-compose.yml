@@ -18,6 +18,8 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
       target: development
+    env_file:
+      - local.env
     ports:
       - '39000:39000'
     volumes:
@@ -50,9 +52,8 @@ services:
     image: nginx:alpine
     ports:
       - "8080:80"
-    environment:
-      NGINX_PORT: 80
-      APP_PHP_BACKEND: "backend:9000"
+    env_file:
+      - local.env
     volumes:
       - static:/static
       - storage:/storage

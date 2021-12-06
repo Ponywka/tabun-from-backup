@@ -1,8 +1,8 @@
-client_max_body_size 16M;
+client_max_body_size ${PHP_MAX_BODY_SIZE};
 
 server {
-    listen	${NGINX_PORT} default_server;
-    listen  [::]:${NGINX_PORT} default_server;
+    listen	80 default_server;
+    listen  [::]:80 default_server;
 
     root /var/www/html;
 
@@ -11,7 +11,7 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass ${APP_PHP_BACKEND};
+        fastcgi_pass ${FPM_BACKEND_HOST}:${FPM_BACKEND_PORT};
         fastcgi_param REDIRECT_STATUS 200;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_read_timeout 600;
