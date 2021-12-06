@@ -17,15 +17,18 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-      target: dev
+      target: development
     ports:
       - '39000:39000'
     volumes:
-      - .:/app
-      - /app/vendor
+      - ./classes:/var/www/html/classes
+      - ./settings:/var/www/html/settings
+      - ./engine:/var/www/html/engine
+      - ./templates:/var/www/html/templates
+      - ./index.php:/var/www/html/index.php
       - static:/static
       - storage:/storage
-      - compiled_locales:/app/templates/skin/synio/locale/ru_RU/LC_MESSAGES
+      - compiled_locales:/var/www/html/templates/skin/synio/locale/ru_RU/LC_MESSAGES
     depends_on:
       - mariadb
       - localization
