@@ -32,6 +32,8 @@ RUN apt-get update \
 
 # PHP config for development
 RUN mv /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+# Clean all uneccessary stuff in pool folder
+RUN rm /usr/local/etc/php-fpm.d/*
 # Pool configuration
 COPY ./docker/php/www.conf /usr/local/etc/php-fpm.d/
 
