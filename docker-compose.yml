@@ -13,7 +13,7 @@ services:
     volumes:
       - ./i18n:/source
       - compiled_locales:/destination
-  php-fpm:
+  backend:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
@@ -53,14 +53,13 @@ services:
       - "8080:80"
     environment:
       NGINX_PORT: 80
-      APP_PHP_BACKEND: "php-fpm:9000"
+      APP_PHP_BACKEND: "backend:9000"
     volumes:
-      - .:/app
       - static:/static
       - storage:/storage
       - ./docker/nginx:/etc/nginx/templates
     depends_on:
-      - php-fpm
+      - backend
       - frontend
 
   mariadb:
