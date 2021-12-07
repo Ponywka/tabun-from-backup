@@ -5,7 +5,7 @@ ARG COMPOSER_PATH="/usr/local/bin/composer"
 ARG COMPOSER_BUILD_DEPS="libzip-dev libonig-dev libcurl4-openssl-dev libicu-dev libmagickwand-6.q16-dev libmagickcore-6.q16-dev"
 ARG COMMON_RUNTIME_DEPS="libzip4 libonig5 libcurl4 libicu67 imagemagick locales unzip"
 ARG PECL_EXTENSIONS="imagick redis xdebug"
-ARG PHP_CORE_EXTENSIONS="mysqli gettext bcmath zip intl"
+ARG PHP_CORE_EXTENSIONS="mysqli gettext bcmath zip intl opcache"
 
 # Composer dependencies
 COPY composer.* ./
