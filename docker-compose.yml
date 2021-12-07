@@ -20,8 +20,8 @@ services:
       target: development
     env_file:
       - local.env
-    ports:
-      - '39000:39000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./classes:/var/www/html/classes
       - ./settings:/var/www/html/settings
