@@ -188,12 +188,12 @@ $config['module']['autoLoad'] = ['Hook', 'Cache', 'Security', 'Session', 'Lang',
 /**
  * Настройка базы данных
  */
-$config['db']['params']['host'] = $_ENV["MYSQL_HOST"];
+$config['db']['params']['host'] = $_SERVER["MYSQL_HOST"];
 $config['db']['params']['port'] = '3306';
-$config['db']['params']['user'] = $_ENV["MYSQL_USER"];
-$config['db']['params']['pass'] = $_ENV["MYSQL_PASSWORD"];
+$config['db']['params']['user'] = $_SERVER["MYSQL_USER"];
+$config['db']['params']['pass'] = $_SERVER["MYSQL_PASSWORD"];
 $config['db']['tables']['engine'] = 'InnoDB';
-$config['db']['params']['dbname'] = $_ENV["MYSQL_DATABASE"];
+$config['db']['params']['dbname'] = $_SERVER["MYSQL_DATABASE"];
 /**
  * Настройка таблиц базы данных
  */
