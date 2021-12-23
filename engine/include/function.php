@@ -124,26 +124,6 @@ function func_htmlspecialchars(&$data, $walkIndex = null)
 }
 
 /**
- * stripslashes умеющая обрабатывать массивы
- *
- * @param unknown_type $data
- */
-function func_stripslashes(&$data)
-{
-    if (is_array($data)) {
-        foreach ($data as $sKey => $value) {
-            if (is_array($value)) {
-                func_stripslashes($data[$sKey]);
-            } else {
-                $data[$sKey]=stripslashes($value);
-            }
-        }
-    } else {
-        $data=stripslashes($data);
-    }
-}
-
-/**
  * Проверяет на корректность значение соглавно правилу
  *
  * @param unknown_type $sValue

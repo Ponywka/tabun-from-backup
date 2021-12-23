@@ -200,12 +200,6 @@ class Engine extends LsObject
     protected function __construct()
     {
         $this->iTimeInit=microtime(true);
-        if (get_magic_quotes_gpc()) {
-            func_stripslashes($_REQUEST);
-            func_stripslashes($_GET);
-            func_stripslashes($_POST);
-            func_stripslashes($_COOKIE);
-        }
     }
 
     /**
