@@ -60,8 +60,8 @@ $config['uploads']['file_permission'] = 0644;
  * Настройки шаблонизатора Smarty
  */
 $config['path']['smarty']['template'] = '___path.root.server___/templates/skin/___view.skin___';
-$config['path']['smarty']['compiled'] = '/var/smarty/compiled';
-$config['path']['smarty']['cache'] = '/var/smarty/cache';
+$config['path']['smarty']['compiled'] = '/tmp/smarty/compiled';
+$config['path']['smarty']['cache'] = '/tmp/smarty/cache';
 $config['path']['smarty']['plug'] = '___path.root.engine___/modules/viewer/plugs';
 $config['smarty']['compile_check'] = true; // Проверять или нет файлы шаблона на изменения перед компиляцией, false может значительно увеличить быстродействие, но потребует ручного удаления кеша при изменения шаблона
 /**
@@ -188,12 +188,12 @@ $config['module']['autoLoad'] = ['Hook', 'Cache', 'Security', 'Session', 'Lang',
 /**
  * Настройка базы данных
  */
-$config['db']['params']['host'] = 'localhost';
+$config['db']['params']['host'] = $_ENV["MYSQL_HOST"];
 $config['db']['params']['port'] = '3306';
-$config['db']['params']['user'] = '';
-$config['db']['params']['pass'] = '';
-$config['db']['params']['type'] = 'mysqli';
-$config['db']['params']['dbname'] = '';
+$config['db']['params']['user'] = $_ENV["MYSQL_USER"];
+$config['db']['params']['pass'] = $_ENV["MYSQL_PASSWORD"];
+$config['db']['tables']['engine'] = 'InnoDB';
+$config['db']['params']['dbname'] = $_ENV["MYSQL_DATABASE"];
 /**
  * Настройка таблиц базы данных
  */
