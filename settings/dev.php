@@ -1,11 +1,11 @@
 <?php
 $config['path']['root']['web'] = 'http://' . $_SERVER['HTTP_HOST'];
 
-$config['db']['params']['host'] = 'mariadb';
+$config['db']['params']['host'] = $_ENV["MYSQL_HOST"];
 $config['db']['params']['port'] = '3306';
-$config['db']['params']['user'] = $_ENV["MARIADB_USER"] ?? 'tabun';
-$config['db']['params']['pass'] = $_ENV["MARIADB_PASSWORD"] ?? 'tabun';
-$config['db']['params']['dbname'] = $_ENV["MARIADB_DATABASE"] ?? 'tabun';
+$config['db']['params']['user'] = $_ENV["MYSQL_USER"];
+$config['db']['params']['pass'] = $_ENV["MYSQL_PASSWORD"];
+$config['db']['params']['dbname'] = $_ENV["MYSQL_DATABASE"];
 $config['db']['tables']['engine'] = 'InnoDB';
 $config['db']['table']['prefix'] = 'ls_';
 

@@ -21,6 +21,7 @@ services:
       target: development
     env_file:
       - local.env
+      - ./docker/db/credentials.env
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -32,12 +33,10 @@ services:
       - storage:/storage
       - compiled_locales:/var/www/html/templates/skin/synio/locale/ru_RU/LC_MESSAGES
     depends_on:
-      - mariadb
+      - db
       - localization
     environment:
-      MARIADB_USER: ${MARIADB_USER:-tabun}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
-      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
+      MYSQL_HOST: db
 
   frontend:
     build:
@@ -63,18 +62,14 @@ services:
       - backend
       - frontend
 
-  mariadb:
-    build:
-      context: .
-      dockerfile: docker/mariadb/Dockerfile
-    environment:
-      MARIADB_USER: ${MARIADB_USER:-tabun}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-tabun}
-      MARIADB_DATABASE: ${MARIADB_DATABASE:-tabun}
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: ${MARIADB_ALLOW_EMPTY_ROOT_PASSWORD:-true}
+  db:
+    image: mariadb:10.1.21
     volumes:
-      - ./docker/mariadb/conf.d:/etc/mysql/conf.d/
       - database:/var/lib/mysql
+      - ./docker/db/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf
+      - ./docker/db/fixtures:/docker-entrypoint-initdb.d
+    env_file:
+      - ./docker/db/credentials.env
 
   redis:
     image: redis:alpine
