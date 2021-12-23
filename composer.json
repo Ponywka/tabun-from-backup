@@ -9,7 +9,7 @@
     "agelxnash/jevix": "dev-master#7ad90e01221d10f9064d3f9ee02c7297694f8d63",
     "smarty/smarty": "3.1.11",
     "smarty-gettext/smarty-gettext": "1.4.0",
-    "everypony/zend-cache-redis": "1.2.0",
+    "everypony/zend-cache-redis": "1.3.0",
     "massivescale/celery-php": "2.1.2",
     "elasticsearch/elasticsearch": "6.0.1",
     "xxtea/xxtea": "1.0.1",
