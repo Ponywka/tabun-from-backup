@@ -1,6 +1,12 @@
 {
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/everypony/Jevix"
+    }
+  ],
   "require": {
-    "agelxnash/jevix": "1.2.1",
+    "agelxnash/jevix": "dev-master#7ad90e01221d10f9064d3f9ee02c7297694f8d63",
     "smarty/smarty": "3.1.11",
     "smarty-gettext/smarty-gettext": "1.4.0",
     "everypony/zend-cache-redis": "1.2.0",
