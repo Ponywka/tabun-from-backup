@@ -8,4 +8,5 @@ RUN pip install --no-cache-dir \
 
 WORKDIR /app
 COPY celery_tasks /app
+RUN python -m compileall .
 COPY docker/celery/celeryconfig.py /app/celeryconfig.py
