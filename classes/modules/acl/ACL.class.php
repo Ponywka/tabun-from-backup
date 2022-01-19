@@ -736,7 +736,8 @@ class ModuleACL extends Module
 				&& $oBlogUser->getBlogPermissions()->check(Permissions::READ)
 				&& $oBlogUser->getBlogPermissions()->check(Permissions::UPDATE)
 			) {
-            return true;
+                return true;
+            }
         }
         return false;
     }
@@ -824,6 +825,7 @@ class ModuleACL extends Module
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
         if ($targetIsTopic) {
+            $oBlog = $oComment->getTarget()->getBlog();
             $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
         } else {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
@@ -873,6 +875,7 @@ class ModuleACL extends Module
          */
         $targetIsTopic = $oComment->getTargetType() === 'topic';
         if ($targetIsTopic) {
+            $oBlog = $oComment->getTarget()->getBlog();
             $editExpiredLimit = Config::Get('acl.edit.comment.limit_time');
         } else {
             $editExpiredLimit = Config::Get('acl.edit.talk_comment.limit_time');
